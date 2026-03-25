@@ -70,7 +70,7 @@ while True:
                     Command = sub[0:IndexColon]
                     Parameter = sub[IndexColon + 1:IndexCR - 2]
                 else:
-                    Command = sub
+                    Command = sub[0:IndexCR - 2]
                     Parameter = ""
             else:
                 Command = ""
@@ -104,6 +104,44 @@ while True:
                     Set.high()
                     Message += "1"
                     uart0.write("Set=1\n")
+            #---
+            if Command == "Reset":
+                Message += " > Reset: 0xAB, 0xE3, 0x0D, 0x0A"
+                SendingData1 = bytearray([0xAB, 0xE3, 0x0D, 0x0A])
+                uart1.write(SendingData1)
+                SendingData0 = bytearray([0x52, 0x65, 0x73, 0x65, 0x74, 0x0D, 0x0A]) # Reset\n\r
+                uart0.write(SendingData0)
+            #---
+            if Command == "ConfigId":
+                Message += " > ConfigId: 0xA9, 0xE1, 0x04, 0x00, 0x09, 0xA0, 0x66, 0x77, 0x88, 0x55, 0x01, 0x00, 0x0D, 0x0A"
+                SendingData1 = bytearray([0xA9, 0xE1, 0x04, 0x00, 0x09, 0xA0, 0x66, 0x77, 0x88, 0x55, 0x01, 0x00, 0x0D, 0x0A])
+                uart1.write(SendingData1)
+                SendingData0 = Command
+                SendingData0 += '\n'
+                SendingData0 += '\r'
+                uart0.write(SendingData0)
+            #---
+            if Command == "ConfigRole":
+                Message += " > ConfigRole: 0xA9, 0xE3, 0xA0, 0x0D, 0x0A"
+                SendingData1 = bytearray([0xA9, 0xE3, 0xA0, 0x0D, 0x0A])
+                uart1.write(SendingData1)
+                SendingData0 = Command
+                SendingData0 += '\n'
+                SendingData0 += '\r'
+                uart0.write(SendingData0)
+            #---
+            if Command == "Send":
+                Message += " > Send:"
+                Message += Parameter
+                #SendingData1 = Parameter
+                SendingData1 = bytearray([0x30, 0x31, 0x32, 0x0D, 0x0A])
+                uart1.write(SendingData1)
+                SendingData0 = Command
+                SendingData0 += ':'
+                SendingData0 += Parameter
+                SendingData0 += '\n'
+                SendingData0 += '\r'
+                uart0.write(SendingData0)
             #---
 
                 
