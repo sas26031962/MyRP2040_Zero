@@ -40,6 +40,8 @@ draw(SkyBlue)
 time.sleep(1)
 draw(Darkness)
 
+CS.low()
+
 #Ports
 uart0 = UART(0, baudrate=115200, tx = Pin(0), rx = Pin(1))
 uart1 = UART(1, baudrate=9600, tx = Pin(4), rx = Pin(5))
@@ -133,8 +135,8 @@ while True:
             if Command == "Send":
                 Message += " > Send:"
                 Message += Parameter
-                #SendingData1 = Parameter
-                SendingData1 = bytearray([0x30, 0x31, 0x32, 0x0D, 0x0A])
+                SendingData1 = Parameter
+                #SendingData1 = bytearray([0x30, 0x31, 0x32, 0x0D, 0x0A])
                 uart1.write(SendingData1)
                 SendingData0 = Command
                 SendingData0 += ':'
